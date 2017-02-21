@@ -1,48 +1,19 @@
-const http = require('http')
-const port = 3000
+'use strict'
 
-const requestHandler = (request, response) => {
-  var headers = request.headers;
-  var method = request.method;
-  var url = request.url;
-  var body = [];
-  request.on('error', function(err) {
-    console.error(err);
-  }).on('data', function(chunk) {
-    body.push(chunk);
-  }).on('end', function() {
-    body = Buffer.concat(body).toString();
-  });
-  console.log(url);
-  response.on('error', function(err) {
-    console.error(err);
-  });
+const pg = require('pg')
+const conString = 'postgres://hjy:1234567890@localhost/node_hero' // make sure to match your own database's credentials
 
-  response.statusCode = 200;
-  response.setHeader('Content-Type', 'application/json');
-  // Note: the 2 lines above could be replaced with this next one:
-  // response.writeHead(200, {'Content-Type': 'application/json'})
-
-  var responseBody = {
-    headers: headers,
-    method: method,
-    url: url,
-    body: body
-  };
-
-  response.write(JSON.stringify(responseBody));
-  response.end();
-  // Note: the 2 lines above could be replaced with this next one:
-  // response.end(JSON.stringify(responseBody))
-}
-
-const server = http.createServer(requestHandler)
-
-server.on('error',err=>console.log(err))
-
-server.listen(port, (err) => {
+pg.connect(conString, function (err, client, done) {
   if (err) {
-    return console.log('something bad happened', err)
+    return console.error('error fetching client from pool', err)
   }
-  console.log(`server is listening on ${port}`)
+  client.query('SELECT * from users',  function (err, result) {
+    done()
+
+    if (err) {
+      return console.error('error happened during query', err)
+    }
+    console.log(result.rows[0])
+    process.exit(0)
+  })
 })
