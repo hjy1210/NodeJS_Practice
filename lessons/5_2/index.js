@@ -42,35 +42,38 @@ const exphbs = require('express-handlebars')
 const port=3000;
 const app = express()
 
-// need implement route /, and route / shoud have a form to post
+// 必須要有網路連線才可以成功 !!!!!!
 app.post('/users', function (req, res, next) {
-  const user = req.body
-  //console.log("req=",req)
-  var s="START:"
-  var strBuilder = [];
-  for(var key in req){
-    //console.log(key,req[key])
-  }
-  console.log(req.form+req.body)
-  //res.send(strBuilder.join(""))
-  res.send(req.form+req.body)
-  /*pg.connect(conString, function (err, client, done) {
-    if (err) {
-      // pass the error to the express error handler
-      return next(err)
-    }
-    client.query('INSERT INTO users (name, age) VALUES ($1, $2);',
-      [user.name, user.age],
-      function (err, result) {
-        done() //this done callback signals the pg driver that the connection can be closed or returned to the connection pool
-
-        if (err) {
+  var body=[]
+  req.on('data', function(chunk) {
+    body.push(chunk);
+  }).on('end', function() {
+    console.log(body.length)
+    body = Buffer.concat(body).toString();
+    // at this point, `body` has the entire request body stored in it as a string
+    console.log("body:",body)
+    const d=JSON.parse(body)   // OK
+    console.log(d.name+1)
+    console.log(d.age+1)
+    //res.end(body)    //OK
+    pg.connect(conString, function (err, client, done) {
+      if (err) {
         // pass the error to the express error handler
-          return next(err)
-        }
-        res.send(result)
+        return next(err)
+      }
+      client.query('INSERT INTO users (name, age) VALUES ($1, $2);',
+        [d.name,d.age],
+        function (err, result) {
+          done() //this done callback signals the pg driver that the connection can be closed or returned to the connection pool
+
+          if (err) {
+          // pass the error to the express error handler
+            return next(err)
+          }
+          res.send(result)
+      })
     })
-  })*/
+  });
 })
 
 app.get('/users', function (req, res, next) {
