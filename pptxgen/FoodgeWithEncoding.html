@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script lang="javascript" src="libs/jquery.min.js"></script>
+  <script lang="javascript" src="libs/jszip.min.js"></script>
+  <script lang="javascript" src="libs/filesaver.min.js"></script>
+  <script lang="javascript" src="libs/pptxgen.js"></script>
+  <title>福智轉換</title>
+</head>
+
+<body>
+  <p>
+    用下面三種方法之一，產生簡報檔案(PowerPoint)。
+  </p>
+  <ol>
+    <li>
+      先將需要排版的字串貼到下面的文字方塊內（不必考慮空白與換行等情事），
+    再按【產生福智PPT】按鈕就可產生所需的PowerPoint檔案。
+    </li>
+    <li>
+      在(Big 5 編碼)勾選方塊沒勾選的情形下，用【Choose File】按鈕選取以 UTF-8 編碼的檔案，
+      檔案內容會出現在下面的文字方塊，
+      再按【產生福智PPT】按鈕就可產生所需的PowerPoint檔案。
+    </li>
+    <li>
+      在(Big 5 編碼)勾選方塊已經勾選的情形下，用【Choose File】按鈕選取以 Big-5 編碼的檔案，
+      檔案內容會出現在下面的文字方塊，
+      再按【產生福智PPT】按鈕就可產生所需的PowerPoint檔案。
+    </li>
+  </ol>
+  <p>
+    <form enctype="multipart/form-data">
+      <input type="checkbox" id="cbox1" value="first_checkbox">
+      <label for="cbox1">Big 5 編碼</label> &nbsp;&nbsp;
+      <input id="upload" type=file accept="text/html" 
+        onchange="if (this.files.length>0) handleFileSelect(this.files[0])">
+    </form>
+  </p>
+  <textarea rows=10 cols=60 id="fujisource"></textarea>
+  <p>
+    <button type="button" onclick="createpptx()">產生福智PPT</button>
+  </p>
+
+  <script>
+    function handleFileSelect(f) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("fujisource").value = e.target.result;
+      }
+      if (document.getElementById("cbox1").checked) {
+        reader.readAsText(f,'big5');
+      }
+      else {
+        reader.readAsText(f,'utf-8');
+      }
+    }
+    
+    function createpptx() {
+
+      var pptx = new PptxGenJS();
+      pptx.setLayout({ width: 9, height: 6 });
+      var str = document.getElementById('fujisource').value
+      if (str==="") {
+        alert("No data")
+        return
+      }
+      str = str.replace(/[ \n\r]/g, "")
+      var npage = str.length / 70
+      if (npage > Math.floor(npage)) {
+        npage = Math.ceil(npage)
+      }
+
+      for (var i = 0; i < npage; i++) {
+        var onepage = str.substr(i * 70, 70)
+        var slide = pptx.addNewSlide({ bkgd: '000000' })
+        var modifiedpage = ""
+        for (var start = 0; start < onepage.length; start = start + 10) {
+          modifiedpage += onepage.substr(start, 10) + "\n"
+        }
+        slide.addText(modifiedpage, {
+          x: -0.5, y: 0.4, font_face: "微軟正黑體", font_size: 44,
+          color: 'dddd22', align: 'center',valign:'top'
+        })
+      }
+      pptx.save('Fuji');
+    }
+
+  </script>
+</body>
+
+</html>
