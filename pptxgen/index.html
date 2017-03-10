@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script lang="javascript" src="libs/jquery.min.js"></script>
+  <script lang="javascript" src="libs/jszip.min.js"></script>
+  <script lang="javascript" src="libs/filesaver.min.js"></script>
+  <script lang="javascript" src="libs/pptxgen.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <p>先將需要排版的字串貼到下面的文字方塊內（不必考慮空白與換行等情事），
+    再按【產生福智ＰＰＴ】按鈕就可產生所需的ＰｏｗｅｒＰｏｉｎｔ檔案。</p>
+  <textarea name="mytext" id="mytext" cols="60" rows="15"></textarea>
+  <p>
+    <button type="button" onclick="createpptx()">產生福智ＰＰＴ</button>
+  </p>
+  <script>
+    function createpptx() {
+
+      var pptx = new PptxGenJS();
+      pptx.setLayout({ width: 9, height: 6 });
+      var str = document.getElementById('mytext').value
+      if (str==="") {
+        alert("No data")
+        return
+      }
+      str = str.replace(/[ \n\r]/g, "")
+      var npage = str.length / 70
+      if (npage > Math.floor(npage)) {
+        npage = Math.ceil(npage)
+      }
+
+      for (var i = 0; i < npage; i++) {
+        var onepage = str.substr(i * 70, 70)
+        var slide = pptx.addNewSlide({ bkgd: '000000' })
+        var modifiedpage = ""
+        for (var start = 0; start < onepage.length; start = start + 10) {
+          modifiedpage += onepage.substr(start, 10) + "\n"
+        }
+        slide.addText(modifiedpage, {
+          x: -0.5, y: 0.4, font_face: "微軟正黑體", font_size: 44,
+          color: 'dddd22', align: 'center',valign:'top'
+        })
+      }
+      pptx.save('Fuji');
+    }
+  </script>
+</body>
+
+</html>
