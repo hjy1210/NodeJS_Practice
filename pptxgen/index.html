@@ -13,8 +13,9 @@
 </head>
 
 <body>
-  <p>先將需要排版的字串貼到下面的文字方塊內（不必考慮空白與換行等情事），
-    再按【產生福智ＰＰＴ】按鈕就可產生所需的ＰｏｗｅｒＰｏｉｎｔ檔案。</p>
+  <p>先將需要排版的字串貼到下面的文字方塊內(最少要有3行，第一行為卷數，第二行為品名，
+    第三行以後為本文，本文不必考慮空白與換行等情事)，
+    再按【產生福智ＰＰＴ】按鈕就可產生所需的PowerPoint檔案。</p>
   <textarea name="mytext" id="mytext" cols="60" rows="15"></textarea>
   <p>
     <button type="button" onclick="createpptx()">產生福智ＰＰＴ</button>
@@ -23,13 +24,32 @@
     function createpptx() {
 
       var pptx = new PptxGenJS();
-      pptx.setLayout({ width: 9, height: 6 });
+      pptx.setLayout({ width: 10.85, height: 7.5 });
       var str = document.getElementById('mytext').value
       if (str==="") {
-        alert("No data")
+        alert('最少要有3行，第一行為卷數，第二行為品名，第三行以後為本文')
         return
       }
+      var lines=str.split('\n')
+      if (lines.length<3){
+        alert('最少要有3行，第一行為卷數，第二行為品名，第三行以後為本文')
+        return
+      }
+      str=lines.slice(2).join('\n')
       str = str.replace(/[ \n\r]/g, "")
+      if (str.length<30){
+        alert('本文最少要有30個字')
+        return
+      }
+      var slide=pptx.addNewSlide({ bkgd: '000000' })
+      var firstpage=""+lines[0].substr(0,10)+"\n"+lines[0].substr(10)+"\n\n"+
+        lines[1]+"\n\n"+str.substr(0,10)+"\n"+str.substr(10,10)+"\n"+str.substr(20,10)
+
+      slide.addText(firstpage, {
+        x: 0.5, y: 0.4, font_face: "微軟正黑體", font_size: 54, bold:true,
+        color: 'dddd22', align: 'center',valign:'top'
+      })
+      str=str.substr(30)
       var npage = str.length / 70
       if (npage > Math.floor(npage)) {
         npage = Math.ceil(npage)
@@ -37,17 +57,17 @@
 
       for (var i = 0; i < npage; i++) {
         var onepage = str.substr(i * 70, 70)
-        var slide = pptx.addNewSlide({ bkgd: '000000' })
+        slide = pptx.addNewSlide({ bkgd: '000000' })
         var modifiedpage = ""
         for (var start = 0; start < onepage.length; start = start + 10) {
           modifiedpage += onepage.substr(start, 10) + "\n"
         }
         slide.addText(modifiedpage, {
-          x: -0.5, y: 0.4, font_face: "微軟正黑體", font_size: 44,
+          x: 0.5, y: 0.4, font_face: "微軟正黑體", font_size: 54, bold:true,
           color: 'dddd22', align: 'center',valign:'top'
         })
       }
-      pptx.save('Fuji');
+      pptx.save('Foodge');
     }
   </script>
 </body>
