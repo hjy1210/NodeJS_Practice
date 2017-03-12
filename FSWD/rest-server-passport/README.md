@@ -49,6 +49,15 @@ Didier Stevens的文章[Make Your Own Cert With OpenSSL on Windows](https://blog
 程式呼叫自我加簽的網站, 參考[A less insecure way](http://stackoverflow.com/questions/20433287/node-js-request-cert-has-expired#answer-29397100) ，選項設定
 `rejectUnauthorized: false`。
 
+#### Oauth2.0
+要用google Oauth2.0的功能，需要
+* 在[API Console](https://console.developers.google.com)
+上產生Credential，
+* 在[API Library](https://console.developers.google.com/apis/library)上將Google+API致能(enable)。
+* passport-google-oauth20
+* google 保留有clientID 與 clientSecret的副本。需要的時候才去下載，不要放在程式碼裡面。
+* redirect的時候，前面要多一個引數307，參考[HTTP Methods and Redirect Status Codes](https://blogs.msdn.microsoft.com/ieinternals/2011/08/19/http-methods-and-redirect-status-codes/)。
+
 #### note
 to change user "admin" has admin priviledge
 In mongo prompt, 
