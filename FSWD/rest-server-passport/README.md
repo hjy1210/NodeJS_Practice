@@ -35,7 +35,10 @@ In order to access, use *token* received from login operation.
 * method GET(ordianry users), POST(admins), DELETE(admins)
 * headers: Content-Type: application/json, x-access-token: *token*
 
-
+#### debug server and client simultaneously
+1. 參考[Calling Externally Hosted Service using Node.js](http://www.dotnetcurry.com/nodejs/1225/call-external-service-using-nodejs)
+實作client.js
+2. 修改 lauch.json，可以同時對server端與client端進行除錯。
 #### note
 to change user "admin" has admin priviledge
 In mongo prompt, 
