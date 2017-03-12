@@ -59,3 +59,9 @@ In mongo prompt,
 * {"username":"honjang","password":"abcde"} 
 * {"username":"yuanhsiang","password":"abcde"} 
 * {"username":"admin","password":"abcde"}
+
+to change user "admin" has admin priviledge
+In mongo prompt, 
+1. use conFusion 
+2. db.users.update({username:"admin"},{$set:{admin:true}})
+
