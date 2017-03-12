@@ -18,6 +18,7 @@ Before application start, we need to start mongodb server!
 Server side: npm start.
 
 Postman side:
+
 #### register
 * url: localhsot://3000/users/register
 * method: POST
@@ -39,6 +40,15 @@ In order to access, use *token* received from login operation.
 1. 參考[Calling Externally Hosted Service using Node.js](http://www.dotnetcurry.com/nodejs/1225/call-external-service-using-nodejs)
 實作client.js
 2. 修改 lauch.json，可以同時對server端與client端進行除錯。
+
+#### https
+在[www.selfsignedcertificate.com](http://www.selfsignedcertificate.com/)可以線上製作自己加簽的數位憑證。
+
+Didier Stevens的文章[Make Your Own Cert With OpenSSL on Windows](https://blog.didierstevens.com/2015/03/30/howto-make-your-own-cert-with-openssl-on-windows/)教人如何製作自我加簽的憑證。
+
+程式呼叫自我加簽的網站, 參考[A less insecure way](http://stackoverflow.com/questions/20433287/node-js-request-cert-has-expired#answer-29397100) ，選項設定
+`rejectUnauthorized: false`。
+
 #### note
 to change user "admin" has admin priviledge
 In mongo prompt, 
