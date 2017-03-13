@@ -23,8 +23,12 @@
       "required": true
     },
     "label": {
+<<<<<<< HEAD
       "type": "string",
       "default": "''"
+=======
+      "type": "string"
+>>>>>>> origin/master
     },
     "price": {
       "type": "string",
