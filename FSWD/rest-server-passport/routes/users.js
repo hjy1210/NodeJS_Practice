@@ -50,6 +50,7 @@ router.post('/login', (req, res, next) => {
         return res.status(500).json({ err: 'Could not login in user' })
       }
       var token = Verify.getToken(user)
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.status(200).json({
         status: 'Login successful!',
         success: true,

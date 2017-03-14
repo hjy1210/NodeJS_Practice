@@ -14,7 +14,8 @@ var login = (username, password, cb)=>{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Content-Length': namepass.length
+      'Content-Length': namepass.length,
+      'Access-Control-Allow-Origin':'*'
     }//,
     //rejectUnauthorized: false
   };
