@@ -1,7 +1,7 @@
 var http = require('http');
 var https = require('https')
 
-const login = (username, password, cb)=>{
+var login = (username, password, cb)=>{
   var namepass = JSON.stringify({
     'username': username,
     'password': password,
