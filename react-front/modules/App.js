@@ -1,5 +1,6 @@
 import React from 'react'
 import login from '../src/login'
+import {getJobs} from '../src/getJobs'
 
 export default class extends React.Component {
   constructor() {
@@ -13,12 +14,18 @@ export default class extends React.Component {
       //this.setState({token:"Beauty"})
     }
     this.handler=this.handler.bind(this)
+    this.handler2=function(){
+      getJobs((jobs)=>{
+        this.setState({token:JSON.stringify(jobs,null,2)})
+      })
+    }
+    this.handler2=this.handler2.bind(this)
   }
   render() {
     return (
       <div>
         <button type="button" onClick={()=>{
-            this.handler()
+            this.handler2()
           }
         }>Get Token
         </button>
