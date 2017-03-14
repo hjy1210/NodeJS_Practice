@@ -7,7 +7,7 @@ var honjang = JSON.stringify({
 
 var loginOptionsPost = {
   host: 'localhost',
-  port: '3443',
+  port: '3000',
   path: '/users/login',
   method: 'POST',
   headers: {
@@ -19,7 +19,7 @@ var loginOptionsPost = {
 var honjangToken
 // http://stackoverflow.com/questions/20433287/node-js-request-cert-has-expired#answer-29397100
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
-var reqPost = https.request(loginOptionsPost, function (res) {
+var reqPost = http.request(loginOptionsPost, function (res) {
   console.log("response statusCode: ", res.statusCode);
   res.on('data', function (data) {
     console.log('Posting Result:\n');
@@ -30,7 +30,7 @@ var reqPost = https.request(loginOptionsPost, function (res) {
     console.log('\n\nPOST Operation Completed');
     var dishesOptionsGet = {
       host: 'localhost',
-      port: '3443',
+      port: '3000',
       path: '/dishes',
       method: 'GET',
       headers: {
@@ -39,7 +39,7 @@ var reqPost = https.request(loginOptionsPost, function (res) {
       }, 
       rejectUnauthorized: false
     };
-    var reqGet=https.request(dishesOptionsGet, function (res) {
+    var reqGet=http.request(dishesOptionsGet, function (res) {
       res.on('data',data=>{
         dishes=JSON.parse(data)
         console.log(JSON.stringify(dishes,null,2)) // pretty stringify
