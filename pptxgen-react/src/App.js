@@ -24,7 +24,7 @@ class App extends Component {
     reader.onloadend=(ev)=>{
       this.setState({text:ev.target.result})
     }
-    // this.setState({text:buf.toString(enc)})  // not work for Big5, OK for utf8
+    // this.setState({text:buf.toString(enc)})  // not work for Big5, due to known encoding big5 
   }
   drop(ev) {
     ev.preventDefault();
