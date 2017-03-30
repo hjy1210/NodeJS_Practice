@@ -14,7 +14,8 @@ class App extends Component {
     // var buf = new Uint8Array(ev.target.result) // OK
     // var buf = new Array(ev.target.result)  // Not OK
     // var buf = ev.target.result // Not OK
-    var buf = new Buffer(ev.target.result)  //OK
+    // var buf = new Buffer(ev.target.result)  //OK but depracated
+    var buf = Buffer.from(ev.target.result)
     var enc = chardet.detect(buf)
     console.log(enc)
     this.setState({ encoding: enc })
@@ -23,6 +24,7 @@ class App extends Component {
     reader.onloadend=(ev)=>{
       this.setState({text:ev.target.result})
     }
+    // this.setState({text:buf.toString(enc)})  // not work for Big5, OK for utf8
   }
   drop(ev) {
     ev.preventDefault();
