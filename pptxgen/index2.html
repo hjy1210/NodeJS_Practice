@@ -50,18 +50,13 @@
         var onepage = str.substr(i * 65, 65)
         slide = pptx.addNewSlide({ bkgd: '000000' })
         var modifiedpage = ""
-        for (var start = 0, j=0; start < onepage.length; start = start + 13,j=j+1) {
-          //modifiedpage += onepage.substr(start, 13) + "\n\n"
-          var ypos=0.7+j*1.25
-          slide.addText(onepage.substr(start, 13), {
-            x: 0.5, y: ypos, font_face: "微軟正黑體", font_size: 54, bold:true,
-            color: 'dddd22', align: 'center',valign:'top'
-          })
+        for (var start = 0; start < onepage.length; start = start + 13) {
+          modifiedpage += onepage.substr(start, 13) + "\n\n"
         }
-        //slide.addText(modifiedpage, {
-        //  x: 0.5, y: 0.7, font_face: "微軟正黑體", font_size: 54, bold:true,
-        //  color: 'dddd22', align: 'center',valign:'top'
-        //})
+        slide.addText(modifiedpage, {
+          x: 0.5, y: 0.7, font_face: "微軟正黑體", font_size: 54, bold:true,
+          color: 'dddd22', align: 'center',valign:'top'
+        })
       }
       pptx.save('Foodge');
     }

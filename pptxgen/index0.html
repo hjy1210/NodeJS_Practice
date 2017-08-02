@@ -34,34 +34,29 @@
       }
       var slide=pptx.addNewSlide({ bkgd: '000000' })
       var firstpage=""+lines[0].substr(0,10)+"\n"+lines[0].substr(10)+"\n\n"+
-        lines[1]+"\n\n"+str.substr(0,13)+"\n\n"+str.substr(13,13)
+        lines[1]+"\n\n"+str.substr(0,10)+"\n"+str.substr(10,10)+"\n"+str.substr(20,10)
 
       slide.addText(firstpage, {
-        x: 0.5, y: 0.7, font_face: "微軟正黑體", font_size: 54, bold:true,
+        x: 0.5, y: 0.4, font_face: "微軟正黑體", font_size: 54, bold:true,
         color: 'dddd22', align: 'center',valign:'top'
       })
-      str=str.substr(26)
-      var npage = str.length / 65     // 65=13*5
+      str=str.substr(30)
+      var npage = str.length / 70
       if (npage > Math.floor(npage)) {
         npage = Math.ceil(npage)
       }
 
       for (var i = 0; i < npage; i++) {
-        var onepage = str.substr(i * 65, 65)
+        var onepage = str.substr(i * 70, 70)
         slide = pptx.addNewSlide({ bkgd: '000000' })
         var modifiedpage = ""
-        for (var start = 0, j=0; start < onepage.length; start = start + 13,j=j+1) {
-          //modifiedpage += onepage.substr(start, 13) + "\n\n"
-          var ypos=0.7+j*1.25
-          slide.addText(onepage.substr(start, 13), {
-            x: 0.5, y: ypos, font_face: "微軟正黑體", font_size: 54, bold:true,
-            color: 'dddd22', align: 'center',valign:'top'
-          })
+        for (var start = 0; start < onepage.length; start = start + 10) {
+          modifiedpage += onepage.substr(start, 10) + "\n"
         }
-        //slide.addText(modifiedpage, {
-        //  x: 0.5, y: 0.7, font_face: "微軟正黑體", font_size: 54, bold:true,
-        //  color: 'dddd22', align: 'center',valign:'top'
-        //})
+        slide.addText(modifiedpage, {
+          x: 0.5, y: 0.4, font_face: "微軟正黑體", font_size: 54, bold:true,
+          color: 'dddd22', align: 'center',valign:'top'
+        })
       }
       pptx.save('Foodge');
     }
