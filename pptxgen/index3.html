@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script lang="javascript" src="libs/jquery.min.js"></script>
+  <script lang="javascript" src="libs/jszip.min.js"></script>
+  <script lang="javascript" src="libs/filesaver.min.js"></script>
+  <script lang="javascript" src="libs/pptxgen.js"></script>
+  <script lang="javascript" src="libs/jschardet.min.js"></script>
+  <script>
+    // https://github.com/gitbrent/PptxGenJS
+    function createpptx() {
+
+      var pptx = new PptxGenJS();
+      pptx.setLayout({ width: 10.85, height: 7.5 });
+      var str = document.getElementById('mytext').value
+      if (str==="") {
+        alert('最少要有3行，第一行為卷數，第二行為品名，第三行以後為本文')
+        return
+      }
+      var lines=str.split('\n')
+      if (lines.length<3){
+        alert('最少要有3行，第一行為卷數，第二行為品名，第三行以後為本文')
+        return
+      }
+      str=lines.slice(2).join('\n')
+      str = str.replace(/[ \n\r]/g, "")
+      if (str.length<30){
+        alert('本文最少要有30個字')
+        return
+      }
+      var slide=pptx.addNewSlide({ bkgd: '000000' })
+      var firstpage=""+lines[0].substr(0,10)+"\n"+lines[0].substr(10)+"\n\n"+
+        lines[1]+"\n\n"+str.substr(0,13)+"\n\n"+str.substr(13,13)
+
+      slide.addText(firstpage, {
+        x: 0.5, y: 0.7, font_face: "微軟正黑體", font_size: 54, bold:true,
+        color: 'ffc000', align: 'center',valign:'top'
+      })
+      str=str.substr(26)
+      var npage = str.length / 65     // 65=13*5
+      if (npage > Math.floor(npage)) {
+        npage = Math.ceil(npage)
+      }
+
+      for (var i = 0; i < npage; i++) {
+        var onepage = str.substr(i * 65, 65)
+        slide = pptx.addNewSlide({ bkgd: '000000' })
+        var modifiedpage = ""
+        for (var start = 0; start < onepage.length; start = start + 13) {
+          modifiedpage += onepage.substr(start, 13) + "\n\n"
+        }
+        slide.addText(modifiedpage, {
+          x: 0.5, y: 0.7, font_face: "微軟正黑體", font_size: 54, bold:true,
+          color: 'ffc000', align: 'center',valign:'top'
+        })
+      }
+      pptx.save('Foodge');
+    }
+  </script>
+  <script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+    // https://github.com/aadsm/jschardet
+    function drop(ev) {
+      ev.preventDefault();
+      var file = ev.dataTransfer.files[0];
+      var reader = new FileReader()
+      reader.onloadend=(ev)=>{
+          console.log(jschardet.detect(ev.target.result).encoding)
+          var encoding=jschardet.detect(ev.target.result).encoding
+          reader.readAsText(file,encoding)
+          reader.onloadend=(event)=>{
+            document.getElementById("mytext").value=event.target.result
+          }
+      }
+      reader.readAsText(file,"ascii")
+    }
+  </script>
+
+
+  <title>福智轉換</title>
+</head>
+
+<body>
+  <h3>操作步驟</h3>
+  <ol>
+    <li>先將需要排版的字串編輯成文字檔案，檔案規格為：最少要有3行，第一行為卷數，第二行為品名，
+    第三行以後為本文，本文不必考慮空白與換行等情事。</li>
+    <li>接著將文字內容以複製/貼上的方式貼到下面的文字方塊內，
+    或者將準備好的文字檔案拖曳進文字方塊內。</li>
+    <li>再按【產生福智ＰＰＴ】按鈕就可產生所需的PowerPoint檔案。</li>
+  </ol>
+  <textarea name="mytext" id="mytext" cols="60" rows="15" 
+    ondrop="drop(event)" ondragover="allowDrop(event)">
+  </textarea>
+  <p>
+    <button type="button" onclick="createpptx()">產生福智ＰＰＴ</button>
+  </p>
+
+</body>
+
+</html>
